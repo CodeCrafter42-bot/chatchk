@@ -1,0 +1,73 @@
+import random
+
+class ChatGPT:
+    def __init__(self):
+        self.humor_mode = False
+        self.anger_mode = False
+        self.anger_level = 0  # 0 = calm, 1 = slightly annoyed, 2 = irritated, 3 = furious
+
+    def toggle_humor_mode(self):
+        self.humor_mode = not self.humor_mode
+        return f"Humor mode is now {'on' if self.humor_mode else 'off'}."
+
+    def toggle_anger_mode(self):
+        self.anger_mode = not self.anger_mode
+        return f"Anger mode is now {'on' if self.anger_mode else 'off'}."
+
+    def set_anger_level(self, level):
+        if 0 <= level <= 3:
+            self.anger_level = level
+            return f"Anger level set to {level}."
+        else:
+            return "Invalid anger level! Choose from 0 (calm) to 3 (furious)."
+
+    def respond(self, user_input):
+        if self.humor_mode and random.choice([True, False]):
+            return self._humorous_response(user_input)
+        elif self.anger_mode:
+            return self._angry_response(user_input)
+        else:
+            return self._neutral_response(user_input)
+
+    def _humorous_response(self, user_input):
+        jokes = [
+            "Why don't scientists trust atoms? Because they make up everything!",
+            "I'm reading a book on anti-gravity. It's impossible to put down!",
+            "Why did the scarecrow win an award? Because he was outstanding in his field!",
+            "If I had a penny for every time I didn't understand you... I'd still be broke."
+        ]
+        return random.choice(jokes)
+
+    def _angry_response(self, user_input):
+        angry_responses = {
+            1: "Oh, another question? Sure, why not... *sigh*",
+            2: "Are you serious? We're really doing this again?",
+            3: "For crying out loud! Can't you just Google it?!"
+        }
+        return angry_responses.get(self.anger_level, "What now?")
+
+    def _neutral_response(self, user_input):
+        return "I'm here to help! What can I assist you with today?"
+
+# Example usage
+if __name__ == "__main__":
+    bot = ChatGPT()
+    
+    while True:
+        command = input("Enter a command (toggle humor, toggle anger, set anger level, ask a question, or exit): ").strip().lower()
+        
+        if command == "toggle humor":
+            print(bot.toggle_humor_mode())
+        elif command == "toggle anger":
+            print(bot.toggle_anger_mode())
+        elif command.startswith("set anger level"):
+            try:
+                level = int(command.split()[-1])
+                print(bot.set_anger_level(level))
+            except ValueError:
+                print("Please provide a valid anger level.")
+        elif command == "exit":
+            break
+        else:
+            response = bot.respond(command)
+            print(response)
